@@ -9,7 +9,7 @@ import {spawn} from 'child_process';
   const app = express();
 
   // Set the network port
-  const port = process.env.PORT || 8082;
+  const port = process.env.PORT || 8080;
   
   // Use the body parser middleware for post requests
   app.use(bodyParser.json());
@@ -57,7 +57,7 @@ import {spawn} from 'child_process';
 
   // Start the Server
   app.listen( port, () => {
-      console.log( `server running http://localhost:8080` );
+      console.log( `server running http://localhost:${port}` );
       console.log( `press CTRL+C to stop server` );
   } );
 })();
