@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
+import {Request, Response} from 'express';
 import {spawn} from 'child_process';
 
 (async () => {
@@ -16,19 +17,24 @@ import {spawn} from 'child_process';
 
   // @TODO1 IMPLEMENT A RESTFUL ENDPOINT
   // GET /filteredimage?image_url={{URL}}
-  app.get("/filteredimage", async (req, res) => {
-      const image_url = req.query.image_url;
+  app.get("/filteredimage", async (req: Request, res: Response) => {
+    try{
+      const image_url: string = req.query.image_url;
+
       if (!image_url){
-        res.send("URL is not valid!");
+        res.status(400).send("URL is not valid!");
       }
-      const image_path = await filterImageFromURL(image_url);
-      const _ = await res.sendFile(image_path, (err) => {
+      const image_path: string = await filterImageFromURL(image_url);
+      const _ = await res.status(200).sendFile(image_path, {}, (err) => {
         if (err){
-          res.send("Error while returning the file!");
+          res.status(400).send("Error while returning the file!");
         }else{
           deleteLocalFiles([image_path]);
         }
       });
+    }catch(err){
+      res.status(400).send(err);
+    }
       
     }
   );
@@ -50,8 +56,8 @@ import {spawn} from 'child_process';
   
   // Root Endpoint
   // Displays a simple message to the user
-  app.get( "/", async ( req, res ) => {
-    res.send("try GET /filteredimage?image_url={{}}")
+  app.get( "/", async ( req: Request, res: Response ) => {
+    res.status(200).send("try GET /filteredimage?image_url={{}}")
   } );
   
 
