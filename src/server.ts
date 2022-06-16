@@ -20,6 +20,7 @@ import {spawn} from 'child_process';
   app.get("/filteredimage", async (req: Request, res: Response) => {
     try{
       const image_url: string = req.query.image_url;
+      console.log(typeof image_url);
 
       if (!image_url){
         res.status(400).send("URL is not valid!");
